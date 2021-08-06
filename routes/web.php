@@ -31,6 +31,14 @@ Route::get('/about', function () {
 
 Route::get('/blog', [BlogController::class, 'index']);
 Route::get('/posts/{post:slug}', [BlogController::class, 'show']);
+Route::get('/categories', function () {
+    $data = [
+        'title' => "Post Categories",
+        'categories' => \App\Models\Category::all(),
+    ];
+    return view('categories', $data);
+});
+
 Route::get('/categories/{category:slug}', function (\App\Models\Category $category) {
     $data = [
         'title' => "Categori | $category->name",
@@ -39,13 +47,7 @@ Route::get('/categories/{category:slug}', function (\App\Models\Category $catego
     ];
     return view('posts', $data);
 });
-Route::get('/categories', function () {
-    $data = [
-        'title' => "Post Categories",
-        'categories' => \App\Models\Category::all(),
-    ];
-    return view('categories', $data);
-});
+
 Route::get('/authors/{author:username}', function (\App\Models\User $author) {
     $data = [
         'title' => 'User Posts',
