@@ -69,4 +69,5 @@ Route::post('/register', [RegisterController::class, 'store'])->middleware('gues
 Route::get('/dashboard', function () {
     return view('dashboard.index');
 })->middleware('auth');
+Route::get('/dashboard/posts/setSlug', [PostController::class, 'setSlug']);
 Route::resource('/dashboard/posts', PostController::class)->middleware('auth');
