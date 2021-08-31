@@ -43,7 +43,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|unique:posts,slug',
+            'category_id' => 'required',
+            'body' => 'required',
+        ]);
+        $validatedData['user_id'] = auth()->user()->id;
+
+        Post::create($validatedData);
+        return redirect('/dashboard/posts')->with('success', 'New post has been successfully added!');
     }
 
     /**
