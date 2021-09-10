@@ -54,8 +54,8 @@
                                     {{ $p->category->name }}
                                 </a>
                             </div>
-                            <img src="https://source.unsplash.com/500x400/?{{ $p->category->slug }}" class="card-img-top"
-                                alt="{{ $p->title }}">
+                            <img src="https://source.unsplash.com/500x400/?{{ $p->category->slug }}"
+                                class="card-img-top" alt="{{ $p->title }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ $p->title }}</h5>
                                 <p>

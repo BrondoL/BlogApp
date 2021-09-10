@@ -77,7 +77,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $data = [
+            'post' => $post,
+            'categories' => Category::all()
+        ];
+        return view('dashboard.posts.edit', $data);
     }
 
     /**
@@ -90,6 +94,17 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|unique:posts,slug,' . $post->id . ',id',
+            'category_id' => 'required',
+            'body' => 'required',
+        ]);
+
+        $validatedData['user_id'] = auth()->user()->id;
+
+        Post::where('id', $post->id)->update($validatedData);
+        return redirect('/dashboard/posts')->with('success', 'Post has been successfully updated!');
     }
 
     /**
@@ -100,7 +115,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        Post::destroy($post->id);
+        return redirect('/dashboard/posts')->with('success', 'Post has been successfully deleted!');
     }
 
     public function setSlug(Request $request)
