@@ -47,8 +47,12 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts,slug',
             'category_id' => 'required',
-            'body' => 'required',
+            'image' => 'image|file|max:1024',
+            'body' => 'required'
         ]);
+        if ($request->file('image')) {
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        }
         $validatedData['user_id'] = auth()->user()->id;
 
         Post::create($validatedData);
