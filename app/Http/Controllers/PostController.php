@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -102,9 +103,16 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'slug' => 'required|unique:posts,slug,' . $post->id . ',id',
             'category_id' => 'required',
+            'image' => 'image|file|max:1024',
             'body' => 'required',
         ]);
 
+        if ($request->file('image')) {
+            if ($request->oldimage) {
+                Storage::delete($request->oldimage);
+            }
+            $validatedData['image'] = $request->file('image')->store('post-images');
+        }
         $validatedData['user_id'] = auth()->user()->id;
 
         Post::where('id', $post->id)->update($validatedData);
@@ -119,6 +127,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->image) {
+            Storage::delete($post->image);
+        }
         Post::destroy($post->id);
         return redirect('/dashboard/posts')->with('success', 'Post has been successfully deleted!');
     }
