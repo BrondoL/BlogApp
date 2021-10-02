@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AdminCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,3 +72,5 @@ Route::get('/dashboard', function () {
 })->middleware('auth');
 Route::get('/dashboard/posts/setSlug', [PostController::class, 'setSlug']);
 Route::resource('/dashboard/posts', PostController::class)->middleware('auth');
+
+Route::resource('/dashboard/categories', AdminCategoryController::class)->except('show')->middleware('admin');
